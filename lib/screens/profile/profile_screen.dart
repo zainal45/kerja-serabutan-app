@@ -5,7 +5,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import '../../core/app_theme.dart';
 import '../../core/routes.dart';
-import '../../core/utils.dart';
 import '../../models/task.dart';
 import '../../models/review.dart';
 import '../../providers/auth_provider.dart';
