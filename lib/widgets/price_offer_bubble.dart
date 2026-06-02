@@ -43,7 +43,7 @@ class PriceOfferBubble extends StatelessWidget {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.06),
+                  color: Colors.black.withValues(alpha: 0.06),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -128,7 +128,7 @@ class PriceOfferBubble extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: AppTheme.success.withOpacity(0.12),
+            color: AppTheme.success.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Row(
@@ -154,7 +154,7 @@ class PriceOfferBubble extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: AppTheme.error.withOpacity(0.12),
+            color: AppTheme.error.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Row(
@@ -181,7 +181,7 @@ class PriceOfferBubble extends StatelessWidget {
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: AppTheme.warning.withOpacity(0.12),
+              color: AppTheme.warning.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(20),
             ),
             child: const Row(
@@ -251,22 +251,22 @@ class PriceOfferBubble extends StatelessWidget {
   Color get _borderColor {
     switch (message.offerStatus) {
       case 'accepted':
-        return AppTheme.success.withOpacity(0.4);
+        return AppTheme.success.withValues(alpha: 0.4);
       case 'rejected':
-        return AppTheme.error.withOpacity(0.4);
+        return AppTheme.error.withValues(alpha: 0.4);
       default:
-        return AppTheme.accentOrange.withOpacity(0.4);
+        return AppTheme.accentOrange.withValues(alpha: 0.4);
     }
   }
 
   Color get _headerColor {
     switch (message.offerStatus) {
       case 'accepted':
-        return AppTheme.success.withOpacity(0.12);
+        return AppTheme.success.withValues(alpha: 0.12);
       case 'rejected':
-        return AppTheme.error.withOpacity(0.12);
+        return AppTheme.error.withValues(alpha: 0.12);
       default:
-        return AppTheme.accentOrange.withOpacity(0.12);
+        return AppTheme.accentOrange.withValues(alpha: 0.12);
     }
   }
 

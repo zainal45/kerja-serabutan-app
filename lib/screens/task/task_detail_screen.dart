@@ -72,7 +72,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
 
     // Show apply dialog
     final result = await _showApplyDialog();
-    if (result == null) return;
+    if (result == null || !mounted) return;
 
     setState(() => _isApplying = true);
     try {
@@ -670,7 +670,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2),
+        color: Colors.white.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
@@ -706,9 +706,9 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withValues(alpha: 0.3)),
       ),
       child: Text(
         getStatusLabel(status),
@@ -731,7 +731,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     }
     return CircleAvatar(
       radius: radius,
-      backgroundColor: AppTheme.primaryBlue.withOpacity(0.12),
+      backgroundColor: AppTheme.primaryBlue.withValues(alpha: 0.12),
       child: Text(
         name.isNotEmpty ? name[0].toUpperCase() : '?',
         style: TextStyle(

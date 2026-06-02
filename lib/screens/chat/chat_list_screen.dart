@@ -109,7 +109,7 @@ class _ChatRoomTile extends StatelessWidget {
             backgroundImage: avatarUrl != null
                 ? CachedNetworkImageProvider(avatarUrl)
                 : null,
-            backgroundColor: AppTheme.primaryBlue.withOpacity(0.12),
+            backgroundColor: AppTheme.primaryBlue.withValues(alpha: 0.12),
             child: avatarUrl == null
                 ? Text(
                     name.isNotEmpty ? name[0].toUpperCase() : '?',

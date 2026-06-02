@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     } catch (_) {
       // Load without location
-      context.read<TaskProvider>().loadNearbyTasks();
+      if (mounted) context.read<TaskProvider>().loadNearbyTasks();
     }
     if (mounted) {
       context.read<ChatProvider>().loadRooms();
@@ -232,7 +232,7 @@ class _BerandaTabState extends State<_BerandaTab> {
                                     context, AppRoutes.createTask),
                                 style: IconButton.styleFrom(
                                   backgroundColor:
-                                      Colors.white.withOpacity(0.2),
+                                      Colors.white.withValues(alpha: 0.2),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),

@@ -66,7 +66,7 @@ class KerjaSerabutanApp extends StatelessWidget {
         builder: (context, child) {
           return MediaQuery(
             data: MediaQuery.of(context).copyWith(
-              textScaler: TextScaler.noScaling,
+              textScaler: TextScaler.linear(1.0),
             ),
             child: child!,
           );

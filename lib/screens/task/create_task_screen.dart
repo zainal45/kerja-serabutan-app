@@ -25,8 +25,6 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
   DateTime? _scheduledAt;
   LatLng? _selectedLocation;
   GoogleMapController? _miniMapController;
-  bool _isPickingLocation = false;
-
   final LocationService _locationService = LocationService();
 
   @override
@@ -85,7 +83,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
       cancelText: 'Batal',
       confirmText: 'Pilih',
     );
-    if (time == null) return;
+    if (time == null || !mounted) return;
 
     setState(() {
       _scheduledAt = DateTime(
@@ -105,6 +103,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
       final latLng = LatLng(position.latitude, position.longitude);
       final address = await _locationService.getAddressFromLatLng(
           position.latitude, position.longitude);
+      if (!mounted) return;
       setState(() {
         _selectedLocation = latLng;
         _addressController.text = address;
@@ -347,9 +346,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                   const SizedBox(height: 14),
 
                   // Mini Map
-                  GestureDetector(
-                    onTap: () => setState(() => _isPickingLocation = true),
-                    child: Container(
+                  Container(
                       height: 180,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
@@ -381,6 +378,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                               final address =
                                   await _locationService.getAddressFromLatLng(
                                       latLng.latitude, latLng.longitude);
+                              if (!mounted) return;
                               setState(() {
                                 _selectedLocation = latLng;
                                 _addressController.text = address;
@@ -406,7 +404,6 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                             ),
                         ],
                       ),
-                    ),
                   ),
                 ],
               ),
@@ -488,7 +485,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),

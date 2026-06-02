@@ -270,7 +270,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                 _applyFilter();
                               },
                               backgroundColor:
-                                  AppTheme.primaryBlue.withOpacity(0.1),
+                                  AppTheme.primaryBlue.withValues(alpha: 0.1),
                               labelStyle: const TextStyle(
                                 color: AppTheme.primaryBlue,
                                 fontFamily: 'Poppins',
@@ -286,7 +286,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                                 _applyFilter();
                               },
                               backgroundColor:
-                                  AppTheme.primaryBlue.withOpacity(0.1),
+                                  AppTheme.primaryBlue.withValues(alpha: 0.1),
                               labelStyle: const TextStyle(
                                 color: AppTheme.primaryBlue,
                                 fontFamily: 'Poppins',

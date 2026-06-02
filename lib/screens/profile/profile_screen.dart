@@ -110,6 +110,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                 icon: const Icon(Icons.edit_outlined),
                 onPressed: () async {
                   await Navigator.pushNamed(context, AppRoutes.editProfile);
+                  if (!context.mounted) return;
                   auth.refreshUser();
                 },
               ),
@@ -140,7 +141,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                             backgroundImage: user.avatarUrl != null
                                 ? CachedNetworkImageProvider(user.avatarUrl!)
                                 : null,
-                            backgroundColor: Colors.white.withOpacity(0.3),
+                            backgroundColor: Colors.white.withValues(alpha: 0.3),
                             child: user.avatarUrl == null
                                 ? Text(
                                     user.name.isNotEmpty
@@ -177,7 +178,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 4),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
@@ -248,7 +249,7 @@ class _ProfileScreenState extends State<ProfileScreen>
           controller: _tabController,
           children: [
             // ─── Tugas Saya Tab ─────────────────────────────────────────────
-            _TasksTab(),
+            const _TasksTab(),
             // ─── Ulasan Tab ─────────────────────────────────────────────────
             _ReviewsTab(reviews: _reviews, isLoading: _isLoadingReviews),
           ],
@@ -274,6 +275,8 @@ class _ProfileScreenState extends State<ProfileScreen>
 // ─── Tasks Tab ────────────────────────────────────────────────────────────────
 
 class _TasksTab extends StatefulWidget {
+  const _TasksTab();
+
   @override
   State<_TasksTab> createState() => _TasksTabState();
 }
@@ -443,7 +446,7 @@ class _ReviewCard extends StatelessWidget {
                   backgroundImage: reviewer?.avatarUrl != null
                       ? CachedNetworkImageProvider(reviewer!.avatarUrl!)
                       : null,
-                  backgroundColor: AppTheme.primaryBlue.withOpacity(0.12),
+                  backgroundColor: AppTheme.primaryBlue.withValues(alpha: 0.12),
                   child: reviewer?.avatarUrl == null
                       ? Text(
                           reviewer?.name.isNotEmpty == true

@@ -54,8 +54,9 @@ class User {
       rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
       totalReviews: (json['totalReviews'] as num?)?.toInt() ?? 0,
       lat: (json['lat'] as num?)?.toDouble() ??
-          (json['location']?['coordinates'] as List?)?.lastOrNull != null
-              ? null
+          ((json['location']?['coordinates'] as List?)?.length ?? 0) >= 2
+              ? ((json['location']?['coordinates'] as List?)?[1] as num?)
+                  ?.toDouble()
               : null,
       lng: (json['lng'] as num?)?.toDouble(),
       distanceKm: (json['distanceKm'] as num?)?.toDouble() ??

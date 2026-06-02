@@ -114,7 +114,7 @@ class _MapScreenState extends State<MapScreen> {
     if (mounted) setState(() => _markers.addAll(newMarkers));
   }
 
-  void _centerOnCurrentLocation() async {
+  Future<void> _centerOnCurrentLocation() async {
     if (_currentPosition != null) {
       _mapController?.animateCamera(
         CameraUpdate.newLatLngZoom(_currentPosition!, 15),
@@ -123,6 +123,7 @@ class _MapScreenState extends State<MapScreen> {
       try {
         final position = await _locationService.getCurrentPosition(
             forceRefresh: true);
+        if (!mounted) return;
         final latLng = LatLng(position.latitude, position.longitude);
         setState(() => _currentPosition = latLng);
         _mapController?.animateCamera(
@@ -197,7 +198,7 @@ class _MapScreenState extends State<MapScreen> {
           // ─── Loading ──────────────────────────────────────────────────────
           if (_isLoading)
             Container(
-              color: Colors.white.withOpacity(0.8),
+              color: Colors.white.withValues(alpha: 0.8),
               child: const Center(
                 child: CircularProgressIndicator(color: AppTheme.primaryBlue),
               ),
@@ -215,7 +216,7 @@ class _MapScreenState extends State<MapScreen> {
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.08),
+                    color: Colors.black.withValues(alpha: 0.08),
                     blurRadius: 8,
                   ),
                 ],
@@ -303,7 +304,7 @@ class _MapScreenState extends State<MapScreen> {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.12),
+            color: Colors.black.withValues(alpha: 0.12),
             blurRadius: 20,
             offset: const Offset(0, -4),
           ),
@@ -319,7 +320,7 @@ class _MapScreenState extends State<MapScreen> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppTheme.accentOrange.withOpacity(0.12),
+                  color: AppTheme.accentOrange.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -400,7 +401,7 @@ class _MapScreenState extends State<MapScreen> {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.12),
+            color: Colors.black.withValues(alpha: 0.12),
             blurRadius: 20,
             offset: const Offset(0, -4),
           ),
@@ -414,7 +415,7 @@ class _MapScreenState extends State<MapScreen> {
             backgroundImage: worker.avatarUrl != null
                 ? CachedNetworkImageProvider(worker.avatarUrl!)
                 : null,
-            backgroundColor: AppTheme.primaryBlue.withOpacity(0.12),
+            backgroundColor: AppTheme.primaryBlue.withValues(alpha: 0.12),
             child: worker.avatarUrl == null
                 ? Text(
                     worker.name.isNotEmpty ? worker.name[0].toUpperCase() : '?',

@@ -123,6 +123,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           forceRefresh: true);
       final address = await _locationService.getAddressFromLatLng(
           position.latitude, position.longitude);
+      if (!mounted) return;
       setState(() {
         _lat = position.latitude;
         _lng = position.longitude;
@@ -254,7 +255,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       CircleAvatar(
                         radius: 56,
                         backgroundColor:
-                            AppTheme.primaryBlue.withOpacity(0.12),
+                            AppTheme.primaryBlue.withValues(alpha: 0.12),
                         backgroundImage: _avatarPath != null
                             ? null // Will show local file
                             : (user?.avatarUrl != null
@@ -370,7 +371,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         backgroundColor: AppTheme.primaryBlue,
                         foregroundColor: Colors.white,
                         disabledBackgroundColor:
-                            AppTheme.primaryBlue.withOpacity(0.5),
+                            AppTheme.primaryBlue.withValues(alpha: 0.5),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -423,7 +424,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             style: const TextStyle(fontFamily: 'Poppins')),
                         onDeleted: () => _removeSkill(skill),
                         backgroundColor:
-                            AppTheme.primaryBlue.withOpacity(0.1),
+                            AppTheme.primaryBlue.withValues(alpha: 0.1),
                         labelStyle: const TextStyle(
                           color: AppTheme.primaryBlue,
                           fontWeight: FontWeight.w500,
@@ -465,7 +466,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),

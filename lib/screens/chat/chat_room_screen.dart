@@ -110,7 +110,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
           children: [
             CircleAvatar(
               radius: 18,
-              backgroundColor: Colors.white.withOpacity(0.2),
+              backgroundColor: Colors.white.withValues(alpha: 0.2),
               child: Text(
                 widget.otherUserName.isNotEmpty
                     ? widget.otherUserName[0].toUpperCase()
@@ -259,7 +259,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border(
-                  top: BorderSide(color: AppTheme.accentOrange.withOpacity(0.3)),
+                  top: BorderSide(color: AppTheme.accentOrange.withValues(alpha: 0.3)),
                   bottom: BorderSide(color: AppTheme.divider),
                 ),
               ),
@@ -312,7 +312,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.06),
+                  color: Colors.black.withValues(alpha: 0.06),
                   blurRadius: 8,
                   offset: const Offset(0, -2),
                 ),
@@ -412,7 +412,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.06),
+              color: Colors.black.withValues(alpha: 0.06),
               blurRadius: 6,
               offset: const Offset(0, 2),
             ),
@@ -438,7 +438,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                 fontFamily: 'Poppins',
                 fontSize: 10,
                 color: isMine
-                    ? Colors.white.withOpacity(0.7)
+                    ? Colors.white.withValues(alpha: 0.7)
                     : AppTheme.textHint,
               ),
             ),
@@ -501,7 +501,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.06),
+              color: Colors.black.withValues(alpha: 0.06),
               blurRadius: 6,
             ),
           ],
@@ -519,7 +519,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               ),
             ),
             const SizedBox(width: 4),
-            _DotAnimation(),
+            const _DotAnimation(),
           ],
         ),
       ),
@@ -532,6 +532,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
 }
 
 class _DotAnimation extends StatefulWidget {
+  const _DotAnimation();
+
   @override
   State<_DotAnimation> createState() => _DotAnimationState();
 }
@@ -571,7 +573,7 @@ class _DotAnimationState extends State<_DotAnimation>
               width: 5,
               height: 5,
               decoration: BoxDecoration(
-                color: AppTheme.textSecondary.withOpacity(opacity),
+                color: AppTheme.textSecondary.withValues(alpha: opacity),
                 shape: BoxShape.circle,
               ),
             );

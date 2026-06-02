@@ -22,7 +22,7 @@ class WorkerCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       elevation: 2,
-      shadowColor: Colors.black.withOpacity(0.08),
+      shadowColor: Colors.black.withValues(alpha: 0.08),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: InkWell(
         onTap: onTap,
@@ -122,7 +122,7 @@ class WorkerCard extends StatelessWidget {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 8, vertical: 3),
                             decoration: BoxDecoration(
-                              color: AppTheme.primaryBlue.withOpacity(0.08),
+                              color: AppTheme.primaryBlue.withValues(alpha: 0.08),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
@@ -193,7 +193,7 @@ class WorkerCard extends StatelessWidget {
     }
     return CircleAvatar(
       radius: 28,
-      backgroundColor: AppTheme.primaryBlue.withOpacity(0.12),
+      backgroundColor: AppTheme.primaryBlue.withValues(alpha: 0.12),
       child: Text(
         worker.name.isNotEmpty ? worker.name[0].toUpperCase() : '?',
         style: const TextStyle(
