@@ -383,7 +383,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                         label: 'Diposting',
                         value: timeago.format(task.createdAt, locale: 'id'),
                       ),
-                      if (task.scheduledAt != null) ...[(
+                      if (task.scheduledAt != null) ...[
                         const SizedBox(height: 12),
                         _buildInfoRow(
                           icon: Icons.calendar_today_outlined,
@@ -391,7 +391,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                           value: formatDateTime(task.scheduledAt!),
                         ),
                       ],
-                      if (task.distanceKm != null) ...[(
+                      if (task.distanceKm != null) ...[
                         const SizedBox(height: 12),
                         _buildInfoRow(
                           icon: Icons.near_me_outlined,
