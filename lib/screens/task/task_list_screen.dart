@@ -101,7 +101,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                       final isSelected = _selectedCategory == c['value'];
                       return GestureDetector(
                         onTap: () => setSheetState(
-                            () => _selectedCategory = c['value'] as String?),
+                            () => _selectedCategory = c['value']),
                         child: Container(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 14, vertical: 8),
@@ -143,7 +143,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                       final isSelected = _selectedStatus == s['value'];
                       return GestureDetector(
                         onTap: () => setSheetState(
-                            () => _selectedStatus = s['value'] as String?),
+                            () => _selectedStatus = s['value']),
                         child: Container(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 14, vertical: 8),
