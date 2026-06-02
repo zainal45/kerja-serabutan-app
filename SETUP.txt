@@ -1,0 +1,44 @@
+KERJA SERABUTAN — Flutter App Setup Steps
+==========================================
+
+1. INSTALL DEPENDENCIES
+   $ flutter pub get
+
+2. GOOGLE MAPS API KEY
+   - Buka: android/app/src/main/AndroidManifest.xml
+   - Ganti "YOUR_GOOGLE_MAPS_API_KEY" dengan API key dari Google Cloud Console
+   - Enable APIs: Maps SDK for Android, Geocoding API, Places API
+
+3. FONTS (Optional)
+   - Download Poppins dari fonts.google.com
+   - Letakkan di: assets/fonts/
+     - Poppins-Regular.ttf
+     - Poppins-Medium.ttf
+     - Poppins-SemiBold.ttf
+     - Poppins-Bold.ttf
+   - Jika tidak ada font, hapus bagian 'fonts:' di pubspec.yaml
+     (Flutter akan fallback ke Roboto)
+
+4. BACKEND URL
+   - Untuk Android emulator: http://10.0.2.2:3000/api (sudah dikonfigurasi)
+   - Untuk device fisik: ganti dengan IP komputer kamu di lib/core/api_config.dart
+
+5. BUILD DEBUG APK
+   $ flutter build apk --debug
+
+6. BUILD RELEASE APK
+   $ flutter build apk --release
+
+7. RUN ON EMULATOR
+   $ flutter run
+
+PERMISSIONS YANG DIBUTUHKAN (sudah di AndroidManifest.xml):
+- INTERNET — untuk API calls
+- ACCESS_FINE_LOCATION — untuk GPS
+- CAMERA — untuk foto profil
+- READ_MEDIA_IMAGES — untuk galeri foto (Android 13+)
+
+CATATAN:
+- minSdkVersion = 21 (Android 5.0+)
+- Socket.io akan auto-reconnect jika terputus
+- Token disimpan di SharedPreferences (persist setelah app restart)
