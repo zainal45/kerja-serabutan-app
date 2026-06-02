@@ -72,14 +72,14 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
 
     // Show apply dialog
     final result = await _showApplyDialog();
-    if (result == null || !mounted) return;
+    if (result == null) return;
 
     setState(() => _isApplying = true);
     try {
       await _taskService.applyToTask(
         widget.taskId,
-        proposedPrice: result['price']!,
-        message: result['message'],
+        proposedPrice: result['price'] as double,
+        message: result['message'] as String?,
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -383,7 +383,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                         label: 'Diposting',
                         value: timeago.format(task.createdAt, locale: 'id'),
                       ),
-                      if (task.scheduledAt != null) ...[
+                      if (task.scheduledAt != null) ...[(
                         const SizedBox(height: 12),
                         _buildInfoRow(
                           icon: Icons.calendar_today_outlined,
@@ -391,7 +391,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                           value: formatDateTime(task.scheduledAt!),
                         ),
                       ],
-                      if (task.distanceKm != null) ...[
+                      if (task.distanceKm != null) ...[(
                         const SizedBox(height: 12),
                         _buildInfoRow(
                           icon: Icons.near_me_outlined,
@@ -670,7 +670,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.2),
+        color: Colors.white.withOpacity(0.2),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
@@ -706,9 +706,9 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
+        color: color.withOpacity(0.12),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withValues(alpha: 0.3)),
+        border: Border.all(color: color.withOpacity(0.3)),
       ),
       child: Text(
         getStatusLabel(status),
@@ -731,7 +731,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     }
     return CircleAvatar(
       radius: radius,
-      backgroundColor: AppTheme.primaryBlue.withValues(alpha: 0.12),
+      backgroundColor: AppTheme.primaryBlue.withOpacity(0.12),
       child: Text(
         name.isNotEmpty ? name[0].toUpperCase() : '?',
         style: TextStyle(

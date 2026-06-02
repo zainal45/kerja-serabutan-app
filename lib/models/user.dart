@@ -53,11 +53,7 @@ class User {
       skills: parseSkills(json['skills']),
       rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
       totalReviews: (json['totalReviews'] as num?)?.toInt() ?? 0,
-      lat: (json['lat'] as num?)?.toDouble() ??
-          ((json['location']?['coordinates'] as List?)?.length ?? 0) >= 2
-              ? ((json['location']?['coordinates'] as List?)?[1] as num?)
-                  ?.toDouble()
-              : null,
+      lat: (json['lat'] as num?)?.toDouble(),
       lng: (json['lng'] as num?)?.toDouble(),
       distanceKm: (json['distanceKm'] as num?)?.toDouble() ??
           (json['distance'] as num?)?.toDouble(),
