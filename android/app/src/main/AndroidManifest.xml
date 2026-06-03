@@ -67,6 +67,11 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <!-- Required by Flutter tool to confirm v2 embedding -->
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
+
     </application>
 
 </manifest>
