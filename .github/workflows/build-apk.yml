@@ -43,7 +43,8 @@ jobs:
       - name: Build debug APK
         run: |
           flutter build apk --debug \
-            --dart-define=API_BASE_URL=${{ secrets.API_BASE_URL || 'http://10.0.2.2:3000/api' }}
+            --dart-define=API_BASE_URL=${{ secrets.API_BASE_URL || 'https://backend-production-e561.up.railway.app/api' }} \
+            --dart-define=SOCKET_URL=${{ secrets.SOCKET_URL || 'https://backend-production-e561.up.railway.app' }}
 
       - name: Build release APK
         if: startsWith(github.ref, 'refs/tags/')
@@ -104,8 +105,8 @@ jobs:
         run: |
           flutter build web --release \
             --base-href /kerja-serabutan-app/ \
-            --dart-define=API_BASE_URL=${{ secrets.API_BASE_URL || 'https://your-backend.railway.app/api' }} \
-            --dart-define=SOCKET_URL=${{ secrets.SOCKET_URL || 'https://your-backend.railway.app' }}
+            --dart-define=API_BASE_URL=${{ secrets.API_BASE_URL || 'https://backend-production-e561.up.railway.app/api' }} \
+            --dart-define=SOCKET_URL=${{ secrets.SOCKET_URL || 'https://backend-production-e561.up.railway.app' }}
 
       - name: Deploy to GitHub Pages (gh-pages branch)
         uses: peaceiris/actions-gh-pages@v4

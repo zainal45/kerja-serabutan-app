@@ -3,12 +3,12 @@
 class ApiConfig {
   static const String baseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'http://10.0.2.2:3000/api',
+    defaultValue: 'https://backend-production-e561.up.railway.app/api',
   );
 
   static const String socketUrl = String.fromEnvironment(
     'SOCKET_URL',
-    defaultValue: 'http://10.0.2.2:3000',
+    defaultValue: 'https://backend-production-e561.up.railway.app',
   );
 
   /// Default search radius in kilometers for nearby tasks/workers.
