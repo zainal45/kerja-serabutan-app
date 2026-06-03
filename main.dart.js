@@ -107581,7 +107581,7 @@ gL5(){var s="application/json",r=t.N,q=A.L(["Content-Type",s,"Accept",s],r,r)
 r=this.a
 if(r!=null&&r.length!==0)q.m(0,"Authorization","Bearer "+A.n(r))
 return q},
-UA(a,b){var s=A.fo("https://your-backend.railway.app/api"+a)
+UA(a,b){var s=A.fo("https://backend-production-e561.up.railway.app/api"+a)
 if(b!=null&&b.a!==0)return s.a6F(0,b)
 return s},
 Ju(a){return this.UA(a,null)},
@@ -107919,7 +107919,7 @@ case 6:case 1:return A.u(q,r)
 case 2:return A.t(o,r)}})
 return A.v($async$pA,r)}}
 A.av5.prototype={
-aAt(a){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e=this,d="https://your-backend.railway.app",c=null,b="query"
+aAt(a){var s,r,q,p,o,n,m,l,k,j,i,h,g,f,e=this,d="https://backend-production-e561.up.railway.app",c=null,b="query"
 if(e.b)return
 s=t.N
 r=t.z
@@ -107936,7 +107936,7 @@ n=p.geM(p)
 m=$.aOo.ao(0,o)&&$.aOo.h(0,o).d.ao(0,n)
 l=J.f(q.h(0,"forceNew"),!0)||J.f(q.h(0,"force new connection"),!0)||!1===q.h(0,"multiplex")||m
 k=A.b7("io")
-if(l){$.b50().bl(B.G,"ignoring socket cache for https://your-backend.railway.app",c,c)
+if(l){$.b50().bl(B.G,"ignoring socket cache for https://backend-production-e561.up.railway.app",c,c)
 k.b=A.aXV(q,d)}else{j=$.aOo.h(0,o)
 if(j==null){j=A.aXV(q,d)
 $.aOo.m(0,o,j)}k.b=j}if(p.gnB(p).length!==0&&q.h(0,b)==null)q.m(0,b,p.gnB(p))
