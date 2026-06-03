@@ -85,9 +85,6 @@ jobs:
   deploy-web:
     name: Build & Deploy Web Preview
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Checkout code
@@ -110,16 +107,9 @@ jobs:
             --dart-define=API_BASE_URL=${{ secrets.API_BASE_URL || 'https://your-backend.railway.app/api' }} \
             --dart-define=SOCKET_URL=${{ secrets.SOCKET_URL || 'https://your-backend.railway.app' }}
 
-      - name: Setup GitHub Pages
-        uses: actions/configure-pages@v5
+      - name: Deploy to GitHub Pages (gh-pages branch)
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          enablement: true
-
-      - name: Upload web build to Pages
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: build/web
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/web
+          publish_branch: gh-pages
