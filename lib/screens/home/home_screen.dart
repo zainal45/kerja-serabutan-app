@@ -21,12 +21,25 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
-  final List<Widget> _pages = const [
-    _BerandaTab(),
-    MapScreen(),
-    ChatListScreen(),
-    ProfileScreen(),
-  ];
+  // Lazily built — MapScreen only constructed when user first taps the map tab,
+  // preventing google_maps_flutter from crashing on invalid API key at startup.
+  final Map<int, Widget> _builtPages = {0: const _BerandaTab()};
+
+  static Widget _buildPage(int index) {
+    switch (index) {
+      case 1: return const MapScreen();
+      case 2: return const ChatListScreen();
+      case 3: return const ProfileScreen();
+      default: return const _BerandaTab();
+    }
+  }
+
+  void _onTabTap(int index) {
+    setState(() {
+      _builtPages.putIfAbsent(index, () => _buildPage(index));
+      _currentIndex = index;
+    });
+  }
 
   @override
   void initState() {
@@ -59,15 +72,19 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _pages,
+      body: Stack(
+        fit: StackFit.expand,
+        children: List.generate(4, (i) {
+          final page = _builtPages[i];
+          if (page == null) return const SizedBox.shrink();
+          return Offstage(offstage: _currentIndex != i, child: page);
+        }),
       ),
       bottomNavigationBar: Consumer<ChatProvider>(
         builder: (_, chatProvider, __) {
           return BottomNavigationBar(
             currentIndex: _currentIndex,
-            onTap: (i) => setState(() => _currentIndex = i),
+            onTap: _onTabTap,
             items: [
               const BottomNavigationBarItem(
                 icon: Icon(Icons.home_outlined),
