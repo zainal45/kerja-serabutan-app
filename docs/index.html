@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kerja Serabutan</title>
+  <meta name="description" content="Platform kerja lepas untuk pekerja serabutan Indonesia." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue: #1976D2;
+      --blue2: #0D47A1;
+      --orange: #FF6D00;
+      --white: #fff;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #060E1F;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* ── CANVAS BG ─────────────────────────────────────── */
+    #bg { position: fixed; inset: 0; z-index: 0; }
+
+    /* ── NAV ─────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 40px;
+      background: rgba(6,14,31,0.6);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 18px; font-weight: 800; color: #fff; text-decoration: none;
+    }
+    .logo-box {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 13px;
+      box-shadow: 0 4px 16px rgba(25,118,210,0.4);
+    }
+    .nav-btn {
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+      color: white; text-decoration: none;
+      padding: 10px 22px; border-radius: 10px;
+      font-size: 14px; font-weight: 700;
+      box-shadow: 0 4px 20px rgba(25,118,210,0.4);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .nav-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(25,118,210,0.6); }
+
+    /* ── HERO ─────────────────────────────────────────────── */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 100px 24px 60px;
+    }
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(25,118,210,0.15);
+      border: 1px solid rgba(25,118,210,0.4);
+      border-radius: 100px; padding: 6px 18px;
+      font-size: 13px; font-weight: 600; color: #90CAF9;
+      margin-bottom: 28px;
+      animation: fadeUp .8s ease both;
+    }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #42A5F5; animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.5)} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+    .hero h1 {
+      font-size: clamp(40px, 7vw, 76px);
+      font-weight: 900; line-height: 1.08;
+      letter-spacing: -2px;
+      margin-bottom: 22px;
+      animation: fadeUp .8s .1s ease both;
+    }
+    .hero h1 .hl {
+      background: linear-gradient(90deg, #42A5F5, #1976D2, #FF6D00);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: 18px; color: rgba(255,255,255,.6);
+      max-width: 520px; line-height: 1.7;
+      margin-bottom: 44px;
+      animation: fadeUp .8s .2s ease both;
+    }
+    .hero-btns {
+      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+      animation: fadeUp .8s .3s ease both;
+    }
+    .btn-dl {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+      color: white; padding: 16px 32px; border-radius: 14px;
+      font-size: 16px; font-weight: 800; text-decoration: none;
+      box-shadow: 0 8px 32px rgba(25,118,210,0.5);
+      transition: transform .25s, box-shadow .25s;
+    }
+    .btn-dl:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 16px 48px rgba(25,118,210,0.65); }
+    .btn-gh {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.15);
+      color: rgba(255,255,255,.85); padding: 16px 28px; border-radius: 14px;
+      font-size: 15px; font-weight: 600; text-decoration: none;
+      transition: background .2s, transform .2s;
+    }
+    .btn-gh:hover { background: rgba(255,255,255,.12); transform: translateY(-2px); }
+
+    /* ── 3D SCENE ─────────────────────────────────────────── */
+    .scene {
+      position: relative; z-index: 1;
+      margin: 60px auto 0;
+      perspective: 1200px;
+      width: 100%; max-width: 700px;
+      height: 380px;
+      animation: fadeUp .8s .4s ease both;
+    }
+    .phones {
+      position: relative; width: 100%; height: 100%;
+      transform-style: preserve-3d;
+      animation: tilt 8s ease-in-out infinite;
+    }
+    @keyframes tilt {
+      0%,100% { transform: rotateX(6deg) rotateY(-12deg); }
+      50%      { transform: rotateX(3deg) rotateY(12deg); }
+    }
+
+    .phone {
+      position: absolute;
+      width: 180px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(25,118,210,0.2),
+        0 30px 80px rgba(0,0,0,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+      backdrop-filter: blur(20px);
+      transform-style: preserve-3d;
+    }
+    .phone::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 60%);
+      pointer-events: none; z-index: 10;
+    }
+    .phone-1 {
+      left: 50%; top: 20px;
+      transform: translateX(-50%) translateZ(40px);
+      width: 190px;
+      animation: float1 5s ease-in-out infinite;
+    }
+    .phone-2 {
+      left: 10%; top: 60px;
+      transform: translateZ(-10px) rotateY(12deg);
+      animation: float2 5.5s ease-in-out infinite;
+    }
+    .phone-3 {
+      right: 10%; top: 60px;
+      transform: translateZ(-10px) rotateY(-12deg);
+      animation: float3 6s ease-in-out infinite;
+    }
+    @keyframes float1 { 0%,100%{transform:translateX(-50%) translateZ(40px) translateY(0)} 50%{transform:translateX(-50%) translateZ(40px) translateY(-14px)} }
+    @keyframes float2 { 0%,100%{transform:translateZ(-10px) rotateY(12deg) translateY(0)} 50%{transform:translateZ(-10px) rotateY(12deg) translateY(-10px)} }
+    @keyframes float3 { 0%,100%{transform:translateZ(-10px) rotateY(-12deg) translateY(0)} 50%{transform:translateZ(-10px) rotateY(-12deg) translateY(-10px)} }
+
+    .p-bar {
+      height: 28px; background: linear-gradient(90deg, var(--blue2), var(--blue));
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 12px;
+      font-size: 10px; font-weight: 700; color: rgba(255,255,255,.9);
+    }
+    .p-body { padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+    .p-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px; padding: 9px 10px;
+    }
+    .p-title { font-size: 11px; font-weight: 700; color: #fff; margin-bottom: 3px; }
+    .p-sub { font-size: 9px; color: rgba(255,255,255,.5); display: flex; justify-content: space-between; }
+    .chip { font-size: 8px; padding: 2px 7px; border-radius: 100px; font-weight: 700; }
+    .chip-g { background: rgba(76,175,80,.2); color: #81C784; }
+    .chip-o { background: rgba(255,152,0,.2); color: #FFB74D; }
+    /* chat screen */
+    .p-chat { padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+    .msg { max-width: 80%; padding: 8px 10px; border-radius: 10px; font-size: 10px; }
+    .msg-r { background: var(--blue); color: #fff; border-radius: 10px 10px 2px 10px; align-self: flex-end; }
+    .msg-l { background: rgba(255,255,255,.08); color: rgba(255,255,255,.85); border-radius: 10px 10px 10px 2px; align-self: flex-start; }
+    /* map screen */
+    .p-map { background: rgba(25,118,210,.12); border-radius: 10px; height: 100px; display: flex; align-items: center; justify-content: center; font-size: 28px; margin: 12px; }
+
+    /* ── FEATURES ─────────────────────────────────────────── */
+    .section {
+      position: relative; z-index: 1;
+      padding: 100px 24px;
+    }
+    .section-tag {
+      text-align: center; font-size: 12px; letter-spacing: 3px;
+      text-transform: uppercase; color: #42A5F5; font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .section-h {
+      text-align: center; font-size: clamp(28px, 4vw, 42px);
+      font-weight: 900; margin-bottom: 12px; letter-spacing: -1px;
+    }
+    .section-s {
+      text-align: center; font-size: 16px; color: rgba(255,255,255,.5);
+      max-width: 460px; margin: 0 auto 60px;
+    }
+    .grid {
+      max-width: 960px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 20px; padding: 28px;
+      transition: all .3s;
+      cursor: default;
+      transform-style: preserve-3d;
+    }
+    .card:hover {
+      background: rgba(25,118,210,.08);
+      border-color: rgba(25,118,210,.3);
+      transform: translateY(-6px) rotateX(2deg);
+      box-shadow: 0 20px 60px rgba(25,118,210,.15);
+    }
+    .card-icon { font-size: 32px; margin-bottom: 16px; display: block; }
+    .card h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+    .card p { font-size: 14px; color: rgba(255,255,255,.5); line-height: 1.65; }
+
+    /* ── CTA ──────────────────────────────────────────────── */
+    .cta {
+      position: relative; z-index: 1;
+      padding: 100px 24px;
+      text-align: center;
+    }
+    .cta-box {
+      max-width: 600px; margin: 0 auto;
+      background: linear-gradient(135deg, rgba(25,118,210,.15), rgba(13,71,161,.2));
+      border: 1px solid rgba(25,118,210,.3);
+      border-radius: 28px; padding: 60px 40px;
+      position: relative; overflow: hidden;
+    }
+    .cta-box::before {
+      content: '';
+      position: absolute; top: -80px; left: 50%;
+      transform: translateX(-50%);
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(25,118,210,.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cta-box h2 { font-size: clamp(28px, 4vw, 40px); font-weight: 900; margin-bottom: 14px; letter-spacing: -1px; }
+    .cta-box p { font-size: 16px; color: rgba(255,255,255,.6); margin-bottom: 36px; }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+      color: white; padding: 18px 40px; border-radius: 14px;
+      font-size: 17px; font-weight: 800; text-decoration: none;
+      box-shadow: 0 8px 40px rgba(25,118,210,.5);
+      transition: all .25s;
+    }
+    .cta-btn:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 16px 60px rgba(25,118,210,.65); }
+    .install-steps {
+      display: flex; justify-content: center; gap: 28px; margin-top: 32px; flex-wrap: wrap;
+    }
+    .ist { display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,.55); }
+    .ist-n {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: rgba(25,118,210,.3); color: #90CAF9;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; flex-shrink: 0;
+    }
+
+    /* ── FOOTER ─────────────────────────────────────────────── */
+    footer {
+      position: relative; z-index: 1;
+      text-align: center; padding: 32px 24px;
+      border-top: 1px solid rgba(255,255,255,.06);
+      font-size: 13px; color: rgba(255,255,255,.3);
+    }
+    footer a { color: #42A5F5; text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @media(max-width:600px){
+      nav { padding: 14px 20px; }
+      .phone-2,.phone-3 { display: none; }
+      .phone-1 { top: 50px; }
+      .scene { height: 320px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ANIMATED BG -->
+<canvas id="bg"></canvas>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">
+    <div class="logo-box">KS</div>
+    Kerja Serabutan
+  </a>
+  <a class="nav-btn" href="#download">Download APK</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="badge"><div class="dot"></div>Backend Live · Gratis</div>
+
+  <h1>Kerja Serabutan<br><span class="hl">untuk Semua Orang</span></h1>
+  <p>Temukan pekerja terdekat atau cari tugas serabutan. Post tugas, nego harga, dan chat real-time — dalam satu app Android.</p>
+
+  <div class="hero-btns">
+    <a class="btn-dl" href="https://github.com/zainal45/kerja-serabutan-app/releases/latest">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.7 9.05 7.4c1.29.07 2.18.74 2.94.8 1.12-.24 2.19-.93 3.37-.84 1.43.11 2.51.67 3.22 1.75-2.88 1.73-2.18 5.52.5 6.6-.57 1.52-1.29 3.02-2.03 4.57zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+      Download APK
+    </a>
+    <a class="btn-gh" href="https://github.com/zainal45/kerja-serabutan-app" target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.03c-3.34.73-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1.01-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.13 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.21.7.82.58C20.56 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      GitHub
+    </a>
+  </div>
+
+  <!-- 3D Phone Scene -->
+  <div class="scene">
+    <div class="phones">
+
+      <!-- CENTER phone: Task List -->
+      <div class="phone phone-1">
+        <div class="p-bar"><span>📋 Tugas Terdekat</span><span>⭐4.8</span></div>
+        <div class="p-body">
+          <div class="p-card">
+            <div class="p-title">Pindah Barang Rumah</div>
+            <div class="p-sub"><span>Rp 150.000</span><span class="chip chip-g">Open</span></div>
+          </div>
+          <div class="p-card">
+            <div class="p-title">Cat Pagar &amp; Tembok</div>
+            <div class="p-sub"><span>Rp 200.000</span><span class="chip chip-o">Nego</span></div>
+          </div>
+          <div class="p-card">
+            <div class="p-title">Bersihkan Taman</div>
+            <div class="p-sub"><span>Rp 75.000</span><span class="chip chip-g">Open</span></div>
+          </div>
+          <div class="p-card">
+            <div class="p-title">Servis AC Rumah</div>
+            <div class="p-sub"><span>Rp 120.000</span><span class="chip chip-g">Open</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LEFT phone: Map -->
+      <div class="phone phone-2">
+        <div class="p-bar"><span>🗺️ Peta</span><span>10 km</span></div>
+        <div class="p-map">📍</div>
+        <div class="p-body" style="gap:6px">
+          <div class="p-card"><div class="p-title">12 Pekerja Terdekat</div><div class="p-sub"><span>0.3 km – 8.1 km</span></div></div>
+          <div class="p-card"><div class="p-title">5 Tugas Baru</div><div class="p-sub"><span>Hari ini</span></div></div>
+        </div>
+      </div>
+
+      <!-- RIGHT phone: Chat -->
+      <div class="phone phone-3">
+        <div class="p-bar"><span>💬 Chat</span><span>🟢 Online</span></div>
+        <div class="p-chat" style="padding-top:14px">
+          <div class="msg msg-l">Saya bisa mulai besok pagi</div>
+          <div class="msg msg-r">Bisa kurang jadi Rp 120.000?</div>
+          <div class="msg msg-l">Deal! Rp 120.000 ✅</div>
+          <div class="msg msg-r">Oke, ditunggu ya!</div>
+          <div class="msg msg-l">Siap, makasih 🙏</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" id="fitur">
+  <p class="section-tag">Fitur Unggulan</p>
+  <h2 class="section-h">Semua dalam Satu App</h2>
+  <p class="section-s">Simple, cepat, dan langsung bisa dipakai.</p>
+
+  <div class="grid">
+    <div class="card">
+      <span class="card-icon">🗺️</span>
+      <h3>Peta Terdekat</h3>
+      <p>Temukan pekerja dan tugas di sekitar kamu dengan Google Maps. Filter radius sesuai kebutuhan.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">💬</span>
+      <h3>Chat Real-time</h3>
+      <p>Komunikasi langsung via Socket.io tanpa perlu tukar nomor HP. Aman dan nyaman.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">🤝</span>
+      <h3>Nego Harga</h3>
+      <p>Sistem penawaran transparan. Sepakati harga yang adil langsung di dalam app.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">📋</span>
+      <h3>Post Tugas</h3>
+      <p>Buat posting tugas dalam detik. Pilih kategori, budget, dan lokasi — langsung tampil ke pekerja.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">⭐</span>
+      <h3>Rating & Review</h3>
+      <p>Sistem reputasi dua arah untuk membangun kepercayaan antar pengguna.</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">🔒</span>
+      <h3>Login Aman</h3>
+      <p>Autentikasi JWT + refresh token. Data kamu tersimpan aman di server PostgreSQL.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DOWNLOAD CTA -->
+<section class="cta" id="download">
+  <div class="cta-box">
+    <h2>Coba Sekarang — Gratis</h2>
+    <p>Download APK, install di HP Android kamu, dan langsung daftar akun baru.</p>
+
+    <a class="cta-btn" href="https://github.com/zainal45/kerja-serabutan-app/releases/latest" target="_blank" rel="noopener">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M5 20h14v-2H5v2zm7-18L5.33 9h3.84v4h5.66V9h3.84L12 2z"/></svg>
+      Download APK Android
+    </a>
+
+    <div class="install-steps">
+      <div class="ist"><div class="ist-n">1</div>Download APK</div>
+      <div class="ist"><div class="ist-n">2</div>Aktifkan sumber tidak dikenal</div>
+      <div class="ist"><div class="ist-n">3</div>Install &amp; buka app</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>
+    <a href="https://github.com/zainal45/kerja-serabutan-app" target="_blank" rel="noopener">GitHub</a>
+    &nbsp;·&nbsp;
+    <a href="https://github.com/zainal45/kerja-serabutan-app/releases" target="_blank" rel="noopener">Releases</a>
+    &nbsp;·&nbsp;
+    <a href="https://github.com/zainal45/kerja-serabutan-app/issues" target="_blank" rel="noopener">Laporkan Bug</a>
+  </p>
+  <p style="margin-top:10px">© 2026 Kerja Serabutan · Open source</p>
+</footer>
+
+<script>
+/* ── Particle / Star field canvas ──────────────────────────── */
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [], mouse = { x: 0, y: 0 };
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+
+/* Create particles */
+for (let i = 0; i < 120; i++) {
+  particles.push({
+    x: Math.random() * 1920,
+    y: Math.random() * 1080,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: (Math.random() - 0.5) * 0.3,
+    r: Math.random() * 1.8 + 0.4,
+    a: Math.random() * 0.6 + 0.1,
+  });
+}
+
+/* Animated 3D-like grid lines */
+let t = 0;
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+
+  /* Background gradient */
+  const grd = ctx.createRadialGradient(W * 0.3, H * 0.2, 0, W * 0.3, H * 0.2, W * 0.8);
+  grd.addColorStop(0, 'rgba(13,71,161,0.12)');
+  grd.addColorStop(1, 'rgba(6,14,31,0)');
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, W, H);
+
+  const grd2 = ctx.createRadialGradient(W * 0.75, H * 0.75, 0, W * 0.75, H * 0.75, W * 0.6);
+  grd2.addColorStop(0, 'rgba(255,109,0,0.06)');
+  grd2.addColorStop(1, 'rgba(6,14,31,0)');
+  ctx.fillStyle = grd2;
+  ctx.fillRect(0, 0, W, H);
+
+  /* Grid */
+  ctx.strokeStyle = 'rgba(25,118,210,0.06)';
+  ctx.lineWidth = 1;
+  const gridSize = 80;
+  const offsetX = (t * 0.3) % gridSize;
+  const offsetY = (t * 0.15) % gridSize;
+  for (let x = -gridSize + offsetX; x < W + gridSize; x += gridSize) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  }
+  for (let y = -gridSize + offsetY; y < H + gridSize; y += gridSize) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+
+  /* Particles */
+  const mx = (mouse.x || W / 2), my = (mouse.y || H / 2);
+  for (const p of particles) {
+    /* gentle mouse attraction */
+    const dx = mx - p.x * (W / 1920), dy = my - p.y * (H / 1080);
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < 200) {
+      p.vx += dx / dist * 0.008;
+      p.vy += dy / dist * 0.008;
+    }
+    p.x += p.vx; p.y += p.vy;
+    p.vx *= 0.99; p.vy *= 0.99;
+    if (p.x < 0) p.x = 1920; if (p.x > 1920) p.x = 0;
+    if (p.y < 0) p.y = 1080; if (p.y > 1080) p.y = 0;
+
+    const sx = p.x * W / 1920, sy = p.y * H / 1080;
+    ctx.beginPath();
+    ctx.arc(sx, sy, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(100,181,246,${p.a})`;
+    ctx.fill();
+  }
+
+  /* Connecting lines between close particles */
+  ctx.lineWidth = 0.5;
+  for (let i = 0; i < particles.length; i++) {
+    const pi = particles[i];
+    const sxi = pi.x * W / 1920, syi = pi.y * H / 1080;
+    for (let j = i + 1; j < particles.length; j++) {
+      const pj = particles[j];
+      const sxj = pj.x * W / 1920, syj = pj.y * H / 1080;
+      const d = Math.hypot(sxi - sxj, syi - syj);
+      if (d < 120) {
+        ctx.strokeStyle = `rgba(25,118,210,${0.18 * (1 - d / 120)})`;
+        ctx.beginPath(); ctx.moveTo(sxi, syi); ctx.lineTo(sxj, syj); ctx.stroke();
+      }
+    }
+  }
+
+  t++;
+  requestAnimationFrame(draw);
+}
+draw();
+
+/* ── 3D card tilt on mouse ─────────────────────────────────── */
+document.querySelectorAll('.card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    card.style.transform = `translateY(-6px) rotateX(${-y * 12}deg) rotateY(${x * 12}deg)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+  });
+});
+</script>
+</body>
+</html>

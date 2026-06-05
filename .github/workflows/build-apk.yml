@@ -83,34 +83,17 @@ jobs:
             build/app/outputs/flutter-apk/app-release.apk
           token: ${{ secrets.GITHUB_TOKEN }}
 
-  deploy-web:
-    name: Build & Deploy Web Preview
+  deploy-landing:
+    name: Deploy Landing Page
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.27.0'
-          channel: stable
-          cache: true
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Build Flutter Web
-        run: |
-          flutter build web --release \
-            --base-href /kerja-serabutan-app/ \
-            --dart-define=API_BASE_URL=${{ secrets.API_BASE_URL || 'https://backend-production-e561.up.railway.app/api' }} \
-            --dart-define=SOCKET_URL=${{ secrets.SOCKET_URL || 'https://backend-production-e561.up.railway.app' }}
-
-      - name: Deploy to GitHub Pages (gh-pages branch)
+      - name: Deploy docs/ to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build/web
+          publish_dir: docs
           publish_branch: gh-pages
